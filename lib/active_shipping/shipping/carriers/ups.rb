@@ -164,6 +164,9 @@ module ActiveMerchant
           root_node << XmlNode.new('CustomerClassification') do |cc_node|
             cc_node << XmlNode.new('Code', CUSTOMER_CLASSIFICATIONS[cc])
           end
+          if options[:CurrencyCode]
+            root_node << XmlNode.new('CurrencyCode')
+          end
           
           root_node << XmlNode.new('Shipment') do |shipment|
             # not implemented: Shipment/Description element
@@ -213,6 +216,10 @@ module ActiveMerchant
                   package_weight << XmlNode.new("Weight", [value,0.1].max)
                 end
               
+                package_node << XmlNode.new("PackageServiceOptions") do |package_service_option|
+                    package_service_option << XmlNode.new("DeclaredValue", package.options[:DeclaredValue])
+                end
+
                 # not implemented:  * Shipment/Package/LargePackageIndicator element
                 #                   * Shipment/Package/ReferenceNumber element
                 #                   * Shipment/Package/PackageServiceOptions element

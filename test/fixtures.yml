@@ -1,9 +1,9 @@
 usps:
   login: APIKey
 ups:
-  key: XmlAccessKey
-  login: UPSDotComLogin
-  password: UPSDotComPassword
+  key: '7CA36474D1414790'
+  login: 'cOnekta9'
+  password: 'hector5cardenas@hotmail.com'
 fedex:
   login: FedExAccountNumber
   password: FedExMeterNumber

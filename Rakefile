@@ -12,7 +12,7 @@ namespace :test do
 
   Rake::TestTask.new(:remote) do |t|
     t.libs << "test"
-    t.pattern = 'test/remote/*_test.rb'
+    t.pattern = 'test/remote/ups_test.rb'
     t.verbose = true
   end
 end
