@@ -216,10 +216,12 @@ module ActiveMerchant
                   package_weight << XmlNode.new("Weight", [value,0.1].max)
                 end
               
-                package_node << XmlNode.new("PackageServiceOptions") do |package_service_option|
-                    package_service_option << XmlNode.new("DeclaredValue") do |declared_value|
-                        declared_value << XmlNode.new('CurrencyCode', package.currency)
-                        declared_value << XmlNode.new('MonetaryValue', package.options[:MonetaryValue])
+                if package.options[:MonetaryValue]
+                    package_node << XmlNode.new("PackageServiceOptions") do |package_service_option|
+                        package_service_option << XmlNode.new("DeclaredValue") do |declared_value|
+                            declared_value << XmlNode.new('CurrencyCode', package.currency)
+                            declared_value << XmlNode.new('MonetaryValue', package.options[:MonetaryValue])
+                        end
                     end
                 end
 
