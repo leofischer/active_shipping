@@ -149,13 +149,13 @@ module ActiveMerchant
         xml_request = XmlNode.new('RatingServiceSelectionRequest') do |root_node|
           root_node << XmlNode.new('Request') do |request|
             request << XmlNode.new('RequestAction', 'Rate')
-            request << XmlNode.new('RequestOption', 'Shop')
+            #request << XmlNode.new('RequestOption', 'Shop')
             # not implemented: 'Rate' RequestOption to specify a single service query
-            # request << XmlNode.new('RequestOption', ((options[:service].nil? or options[:service] == :all) ? 'Shop' : 'Rate'))
+            request << XmlNode.new('RequestOption', ((options[:service].nil? or options[:service] == :all) ? 'Shop' : 'Rate'))
           end
-          
+
           pickup_type = options[:pickup_type] || :daily_pickup
-          
+
           root_node << XmlNode.new('PickupType') do |pickup_type_node|
             pickup_type_node << XmlNode.new('Code', PICKUP_CODES[pickup_type])
             # not implemented: PickupType/PickupDetails element
@@ -167,7 +167,7 @@ module ActiveMerchant
           if options[:CurrencyCode]
             root_node << XmlNode.new('CurrencyCode')
           end
-          
+
           root_node << XmlNode.new('Shipment') do |shipment|
             # not implemented: Shipment/Description element
             shipment << build_location_node('Shipper', (options[:shipper] || origin), options)
@@ -175,7 +175,13 @@ module ActiveMerchant
             if options[:shipper] and options[:shipper] != origin
               shipment << build_location_node('ShipFrom', origin, options)
             end
-            
+
+            if options[:negotiated_rate]
+                shipment << XmlNode.new('RateInformation') do |rate_information|
+                  rate_information << XmlNode.new('NegotiatedRatesIndicator')
+                end
+            end
+
             # not implemented:  * Shipment/ShipmentWeight element
             #                   * Shipment/ReferenceNumber element                    
             #                   * Shipment/Service element                            
@@ -216,11 +222,11 @@ module ActiveMerchant
                   package_weight << XmlNode.new("Weight", [value,0.1].max)
                 end
               
-                if package.options[:MonetaryValue]
+                if package.options[:InsuredValue]
                     package_node << XmlNode.new("PackageServiceOptions") do |package_service_option|
                         package_service_option << XmlNode.new("DeclaredValue") do |declared_value|
                             declared_value << XmlNode.new('CurrencyCode', package.currency)
-                            declared_value << XmlNode.new('MonetaryValue', package.options[:MonetaryValue])
+                            declared_value << XmlNode.new('MonetaryValue', package.options[:InsuredValue])
                         end
                     end
                 end
