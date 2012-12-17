@@ -224,7 +224,7 @@ module ActiveMerchant
               
                 if package.options[:InsuredValue]
                     package_node << XmlNode.new("PackageServiceOptions") do |package_service_option|
-                        package_service_option << XmlNode.new("DeclaredValue") do |declared_value|
+                        package_service_option << XmlNode.new("InsuredValue") do |declared_value|
                             declared_value << XmlNode.new('CurrencyCode', package.currency)
                             declared_value << XmlNode.new('MonetaryValue', package.options[:InsuredValue])
                         end
