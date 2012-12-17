@@ -12,7 +12,7 @@ module ActiveMerchant #:nodoc:
                                   # http://en.wikipedia.org/wiki/ISO_4217
       attr_reader :delivery_date  # Usually only available for express shipments
       attr_reader :delivery_range # Min and max delivery estimate in days
-        
+
       def initialize(origin, destination, carrier, service_name, options={})
         @origin, @destination, @carrier, @service_name = origin, destination, carrier, service_name
         @service_code = options[:service_code]
@@ -22,9 +22,14 @@ module ActiveMerchant #:nodoc:
           @package_rates = Array(options[:packages]).map {|p| {:package => p}}
         end
         @total_price = Package.cents_from(options[:total_price])
+        @negotiated_price = Package.cents_from(options[:negotiated_price])
         @currency = options[:currency]
         @delivery_range = options[:delivery_range] ? options[:delivery_range].map { |date| date_for(date) }.compact : []
         @delivery_date = @delivery_range.last
+      end
+
+      def negotiated_price
+        @negotiated_price
       end
 
       def total_price

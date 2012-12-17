@@ -304,9 +304,15 @@ module ActiveMerchant
             days_to_delivery = rated_shipment.get_text('GuaranteedDaysToDelivery').to_s.to_i
             days_to_delivery = nil if days_to_delivery == 0
 
+            if rated_shipment.get_text('NegotiatedRates/NetSummaryCharges/GrandTotal/MonetaryValue') 
+                negotiated_rate = rated_shipment.get_text('NegotiatedRates/NetSummaryCharges/GrandTotal/MonetaryValue').to_s.to_f
+            else
+                negotiated_rate = nil
+            end
             rate_estimates << RateEstimate.new(origin, destination, @@name,
                                 service_name_for(origin, service_code),
                                 :total_price => rated_shipment.get_text('TotalCharges/MonetaryValue').to_s.to_f,
+                                :negotiated_price => negotiated_rate,
                                 :currency => rated_shipment.get_text('TotalCharges/CurrencyCode').to_s,
                                 :service_code => service_code,
                                 :packages => packages,
